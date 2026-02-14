@@ -1,16 +1,19 @@
+
 const contents = document.querySelectorAll('.content');
 
-function reveal() {
-    const triggerBottom = window.innerHeight * 0.85;
 
-    contents.forEach(content => {
-        const boxTop = content.getBoundingClientRect().top;
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
 
-        if (boxTop < triggerBottom) {
-            content.classList.add('show');
+            entry.target.classList.add('show');
+
+            observer.unobserve(entry.target);
         }
     });
-}
+}, {
+    threshold: 0.2
+});
 
-window.addEventListener('scroll', reveal);
-reveal();
+
+contents.forEach(content => observer.observe(content));
